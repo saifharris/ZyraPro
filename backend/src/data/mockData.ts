@@ -30,7 +30,7 @@ export const students: Student[] = [
   },
 ];
 
-export const tasks: Task[] = [
+const SEED_TASKS: Task[] = [
   {
     id: "tsk_001",
     studentId: "stu_001",
@@ -176,6 +176,10 @@ export const tasks: Task[] = [
   },
 ];
 
+// Exported as a mutable reference so route handlers can splice/update in place.
+// Call resetData() in tests to restore the original state between runs.
+export const tasks: Task[] = SEED_TASKS.map((t) => ({ ...t }));
+
 export const messages: Message[] = [
   {
     id: "msg_001",
@@ -250,3 +254,7 @@ export const messages: Message[] = [
     receivedAt: "2026-05-21T08:00:00Z",
   },
 ];
+
+export function resetData(): void {
+  tasks.splice(0, tasks.length, ...SEED_TASKS.map((t) => ({ ...t })));
+}
