@@ -1,7 +1,9 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 import { TaskItem } from "../components/TaskItem";
-import { Task } from "../types";
+import { Task, TaskStatus } from "../types";
+
+type StatusChangeFn = (taskId: string, status: TaskStatus) => Promise<void>;
 
 const baseTask: Task = {
   id: "tsk_001",
@@ -22,10 +24,10 @@ const overdueTask: Task = {
 };
 
 describe("TaskItem", () => {
-  let onStatusChange: ReturnType<typeof vi.fn>;
+  let onStatusChange: Mock<StatusChangeFn>;
 
   beforeEach(() => {
-    onStatusChange = vi.fn().mockResolvedValue(undefined);
+    onStatusChange = vi.fn<StatusChangeFn>().mockResolvedValue(undefined);
   });
 
   it("renders the task title and description", () => {
